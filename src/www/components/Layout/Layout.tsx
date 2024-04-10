@@ -2,9 +2,39 @@ import { type User } from '@/types'
 import { type PropsWithChildren } from '@kitajs/html'
 
 const Layout = ({ title, user, currentUrl, children }: PropsWithChildren<{ title: string, currentUrl: string, user?: User }>) => {
-  const active = ' bg-blue-100 text-blue-500'
+  const active = ' bg-white text-black border-b-1'
 
-  console.log(user)
+  
+  function toggleUserMenu () {
+    const $buttonMenu = document.querySelector('#user-menu-btn')
+    const $userMenu = document.querySelector('#user-menu')
+
+    const hide = () => {
+      $userMenu?.classList.add('hidden')
+      $buttonMenu?.classList.remove('bg-white')
+      $buttonMenu?.classList.remove('text-black')
+    }
+
+    if ($userMenu?.classList.contains('hidden')) {
+      $buttonMenu?.classList.add('bg-white')
+      $buttonMenu?.classList.add('text-black')
+      $userMenu.classList.remove('hidden')
+
+      setTimeout(() => {
+        document.addEventListener('click', (event) => {
+          const { target } = event
+          
+          if (target !== $buttonMenu) {
+            hide()
+          }
+        }, { once: true })
+      }, 0)
+
+      return
+    }
+
+    hide()
+  }
 
   return (
     <html lang="en">
@@ -18,35 +48,55 @@ const Layout = ({ title, user, currentUrl, children }: PropsWithChildren<{ title
       <link rel="stylesheet" href="/public/css/unocss-tailwind.min.css"></link>
       <link rel="stylesheet" href="/public/css/styles.css"></link>
     </head>
-    <body class="min-h-screen max-w-[1280px] mx-auto">
-      <header>
-        <nav class="grid grid-cols-2">
+    <body class="min-h-screen">
+      <header class="bg-black text-white">
+        <nav class="grid grid-cols-2 max-w-[1280px] mx-auto">
           <div class="flex justify-start items-center [&>a]:py-2 [&>a]:px-6">
-            <a href="/" class={ 'font-semibold hover:bg-blue-100 hover:text-blue-500' + (currentUrl === '/' ? active : '')}>Home</a>
+            <a href="/" class={ 'flex gap-2 items-center font-semibold hover:bg-white hover:text-black' + (currentUrl === '/' ? active : '')}>
+              <img src="/public/images/logos/bun.svg" width={30} alt="logo bun" />
+              Home
+            </a>
           </div>
 
           <div class="flex justify-end items-center [&>a]:py-2 [&>a]:px-6">
           {
             user ?
-            <>
-              <a href="/logout" class={ 'font-semibold hover:bg-blue-100 hover:text-blue-500' + (currentUrl === '/logout' ? active : '')}>Logout</a>
-              <p>{user.name}</p>
-            </>
+            <div class="relative">
+              <button
+                id="user-menu-btn"
+                onclick="toggleUserMenu()"
+                class="flex items-center gap-2 hover:bg-white hover:text-black font-semibold rounded py-2 px-6"
+              >
+                {user.name}
+                <svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none icon icon-tabler icon-tabler-chevron-down hover:text-black" width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M6 9l6 6l6 -6" />
+                </svg>
+              </button>
+
+              <div id="user-menu" class="hidden rounded absolute top-11 right-0 w-50 bg-black py-3 text-right">
+                <a href="/profile" class="block w-full font-semibold hover:bg-white hover:text-black px-3 py-2">Profile</a>
+                <a href="/logout" class="block w-full font-semibold hover:bg-white hover:text-black px-3 py-2">Logout</a>
+              </div>
+
+            </div>
             :
             <>
-              <a href="/login" class={ 'font-semibold hover:bg-blue-100 hover:text-blue-500' + (currentUrl === '/login' ? active : '')}>Log in</a>
-              <a href="/register" class={ 'font-semibold hover:bg-blue-100 hover:text-blue-500' + (currentUrl === '/register' ? active : '')}>Register</a>
+              <a href="/login" class={ 'font-semibold hover:bg-white hover:text-black rounded' + (currentUrl === '/login' ? active : '')}>Log in</a>
+              <a href="/register" class={ 'font-semibold hover:bg-white hover:text-black rounded' + (currentUrl === '/register' ? active : '')}>Register</a>
             </>
           }
           </div>
         </nav>
       </header>
 
-      <main class="px-6 py-4">
+      <main class="px-6 py-4 max-w-[1280px] mx-auto">
         { children }
       </main>
 
       <footer class="text-center">@devmafia 2024</footer>
+
+      <script>{ toggleUserMenu }</script>
     </body>
     </html>
   )

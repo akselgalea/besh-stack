@@ -79,9 +79,11 @@ const www = new Elysia()
     set.redirect = '/login'
   })
   .get('test', Test)
-  .get('*', (ctx) => {
+  .get('*', async ({ path, cookie: { auth }, jwt }) => {
+    const user = await jwt.verify(auth.value)
+    
     return (
-      <Layout title="Page not found" currentUrl={ctx.path}>
+      <Layout title="Page not found" currentUrl={path} user={ user as User }>
         <NotFound></NotFound>
       </Layout>
     )

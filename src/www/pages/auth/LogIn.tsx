@@ -20,7 +20,9 @@ const LoginPage = ({ old, errors, errorMessage }: { old?: LoginRequest, errorMes
         <section class="bg-gray-200 h-screen p-4 md:px-10 flex flex-col">
           <header>
             <nav class="flex justify-between gap-4 items-center">
-              <a href="/" class="font-bold text-3xl">Bun todo</a>
+              <a href="/" class="font-bold text-3xl">
+                <img src="/public/images/logos/bun.svg" width={55} alt="logo bun" />
+              </a>
               <a href="/register" class="underline font-semibold">Create an account</a>
             </nav>
           </header>
@@ -107,8 +109,8 @@ const LoginPage = ({ old, errors, errorMessage }: { old?: LoginRequest, errorMes
           </section>
         </section>
 
-        <div class="bg-blue-500">
-
+        <div class="bg-black h-full grid place-items-center">
+          <img src="/public/images/logos/bun4x.png" alt="logo bun" />
         </div>
       </main>
     </body>
