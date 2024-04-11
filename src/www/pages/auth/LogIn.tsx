@@ -1,21 +1,10 @@
 import { typeToFlattenedError } from "zod";
 import type { LoginRequest } from "@/types";
+import GuestLayout from "@/www/components/Layout/GuestLayout";
 
 const LoginPage = ({ old, errors, errorMessage }: { old?: LoginRequest, errorMessage?: string, errors?: typeToFlattenedError<{ email: string; password: string; }, string> }) => {
-
   return (
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Bun todo - Log in</title>
-
-      <script src="/public/js/htmx.min.js"></script>
-      <script src="/public/js/unocss-runtime.js"></script>
-      <link rel="stylesheet" href="/public/css/unocss-tailwind.min.css"></link>
-      <link rel="stylesheet" href="/public/css/styles.css"></link>
-    </head>
-    <body class="min-h-screen">
+    <GuestLayout title="Bun todo - Login">
       <main class="grid grid-cols-1 lg:grid-cols-2">
         <section class="bg-gray-200 h-screen p-4 md:px-10 flex flex-col">
           <header>
@@ -113,8 +102,7 @@ const LoginPage = ({ old, errors, errorMessage }: { old?: LoginRequest, errorMes
           <img src="/public/images/logos/bun4x.png" alt="logo bun" />
         </div>
       </main>
-    </body>
-    </html>
+    </GuestLayout>
   )
 }
 

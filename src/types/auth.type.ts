@@ -1,4 +1,4 @@
-export type User = {
+type User = {
   id: number
   name: string
   lastname: string
@@ -9,7 +9,17 @@ export type User = {
   deletedAt: string
 }
 
-export type LoginRequest = {
+type LoginRequest = {
   email: string
   password: string
 }
+
+type RegisterRequest = {
+  name: string
+  lastname: string
+  email: string
+  password: string
+  confirmation: string
+}
+
+export { User, LoginRequest, RegisterRequest }

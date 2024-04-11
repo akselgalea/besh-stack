@@ -42,13 +42,12 @@ const Layout = ({ title, user, currentUrl, children }: PropsWithChildren<{ title
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>Bun todo - { title }</title>
-
+      <link rel="stylesheet" href="/public/css/styles.css"></link>
+      <link rel="stylesheet" href="/public/css/unocss-tailwind.min.css"></link>
       <script src="/public/js/htmx.min.js"></script>
       <script src="/public/js/unocss-runtime.js"></script>
-      <link rel="stylesheet" href="/public/css/unocss-tailwind.min.css"></link>
-      <link rel="stylesheet" href="/public/css/styles.css"></link>
     </head>
-    <body class="min-h-screen">
+    <body class="min-h-screen" un-cloak>
       <header class="bg-black text-white">
         <nav class="grid grid-cols-2 max-w-[1280px] mx-auto">
           <div class="flex justify-start items-center [&>a]:py-2 [&>a]:px-6">
@@ -75,10 +74,11 @@ const Layout = ({ title, user, currentUrl, children }: PropsWithChildren<{ title
               </button>
 
               <div id="user-menu" class="hidden rounded absolute top-11 right-0 w-50 bg-black py-3 text-right">
-                <a href="/profile" class="block w-full font-semibold hover:bg-white hover:text-black px-3 py-2">Profile</a>
-                <a href="/logout" class="block w-full font-semibold hover:bg-white hover:text-black px-3 py-2">Logout</a>
+                {/* <a href="/profile" class="block w-full font-semibold hover:bg-white hover:text-black px-3 py-2">Profile</a> */}
+                <form action="/logout" method="POST">
+                  <button type="submit" class="block w-full font-semibold hover:bg-white hover:text-black px-3 py-2 text-right">Logout</button>
+                </form>
               </div>
-
             </div>
             :
             <>
@@ -90,7 +90,7 @@ const Layout = ({ title, user, currentUrl, children }: PropsWithChildren<{ title
         </nav>
       </header>
 
-      <main class="px-6 py-4 max-w-[1280px] mx-auto">
+      <main class="px-6 py-4 max-w-[1280px] mx-auto" un-cloak>
         { children }
       </main>
 

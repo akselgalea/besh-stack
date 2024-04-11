@@ -1,14 +1,15 @@
-import Elysia, { t } from "elysia"
+import Elysia, { StatusMap, t } from "elysia"
 import HomePage from "./pages/home/Home"
 import { html } from "@elysiajs/html"
 import Layout from "./components/Layout/Layout"
 import NotFound from "./pages/not-found/NotFound"
 import Test from "./pages/test/Test"
 import LoginPage from "./pages/auth/LogIn"
-import { ValidateLogin } from "@/api/schema/auth.schema"
+import { ValidateLogin } from "@/schema/auth.schema"
 import { LoginRequest, User } from "@/types"
 import { Login } from "@/utils/auth"
 import jwt from "@elysiajs/jwt"
+import { routes as authRoutes } from "./auth"
 
 const www = new Elysia()
   .use(html())
@@ -18,11 +19,12 @@ const www = new Elysia()
       secret: process.env.JWT_SECRET!
     })
   )
+  .use(authRoutes)
   .get('', async ({ path, jwt, cookie: { auth }, set }) => {
     const user = await jwt.verify(auth.value)
 
     if (!user) {
-      set.status = 401
+      set.status = StatusMap["Unauthorized"]
       set.redirect = '/login'
 
       return 'Unauthorized'
@@ -33,50 +35,6 @@ const www = new Elysia()
         <HomePage></HomePage>
       </Layout>
     )
-  })
-  .get('login', async ({ jwt, cookie: { auth }, set }) => {
-    const user = await jwt.verify(auth.value)
-
-    if (user) {
-      console.log(user)
-      set.status = 401
-      set.redirect = '/'
-
-      return 'Unauthorized'
-    }
-
-    return LoginPage({})
-  })
-  .post('login', async ({ body, set, jwt, cookie: { auth } }) => {
-    const validated = ValidateLogin(body)
-    
-    if (!validated.success) {
-      return LoginPage({ old: body, errors: validated.error.flatten() })
-    }
-
-    const user = await Login(validated.data)
-
-    if (!user) {
-      return LoginPage({ old: body, errorMessage: "Your login credentials don't match our records" })
-    }
- 
-    auth.set({
-      value: await jwt.sign({ email: user.email, name: user.name, lastname: user.lastname }),
-      httpOnly: true,
-      maxAge: 7 * 86400, // one week
-      path: '/'
-    })
-
-    set.redirect = '/'
-  }, {
-    body: t.Object({
-      email: t.String(),
-      password: t.String()
-    })
-  })
-  .get('logout', ({ cookie: { auth }, set }) => {
-    auth.remove()
-    set.redirect = '/login'
   })
   .get('test', Test)
   .get('*', async ({ path, cookie: { auth }, jwt }) => {
