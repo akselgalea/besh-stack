@@ -1,6 +1,7 @@
 import { typeToFlattenedError } from "zod";
 import type { LoginRequest } from "@/types";
 import GuestLayout from "@/www/components/Layout/GuestLayout";
+import LoginForm from "./partials/LoginForm";
 
 const LoginPage = ({ old, errors, errorMessage }: { old?: LoginRequest, errorMessage?: string, errors?: typeToFlattenedError<{ email: string; password: string; }, string> }) => {
   return (
@@ -41,60 +42,7 @@ const LoginPage = ({ old, errors, errorMessage }: { old?: LoginRequest, errorMes
               <div class="w-full h-2px bg-black rounded"></div>
             </div>
 
-            <section id="login-form" class="max-w-400px w-full">
-              {
-                errorMessage &&
-                <p class="text-red-500 font-medium text-sm text-center mb-4">{ errorMessage }</p>
-              }
-
-              <form action="/login" method="POST">
-                <div>
-                  <input
-                    type="text"
-                    id="email"
-                    name="email"
-                    placeholder="Email"
-                    class="font-medium text-base p-3 rounded-lg bg-white placeholder-black w-full"
-                    value={ old?.email }
-                  />
-                  {
-                    errors?.fieldErrors.email && 
-                    <p class="px-1 mt-1 text-red-500 text-xs font-medium">{ errors.fieldErrors.email[0] }</p>
-                  }
-                </div>
-
-                <div class="mt-3">
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Password"
-                    class="font-medium text-base p-3 rounded-lg bg-white placeholder-black w-full"
-                    value={ old?.password }
-                  />
-                  {
-                    errors?.fieldErrors.password && 
-                    <p class="px-1 mt-1 text-red-500 text-xs font-medium">{ errors.fieldErrors.password[0] }</p>
-                  }
-                </div>
-
-                <div class="mt-3 flex items-center justify-between">
-                  <label for="keepsigned" class="flex items-center gap-2 font-semibold text-sm">
-                    <input type="checkbox" id="keepsigned" name="keepsigned" />
-                    Keep me signed in
-                  </label>
-
-                  <a href="/forgot-password" class="underline text-sm font-medium">Forgot password</a>
-                </div>
-
-                <button
-                  type="submit"
-                  class="mt-8 bg-black! text-white rounded-md p-3 w-full font-semibold"
-                >
-                  Sign in
-                </button>
-              </form>
-            </section>
+            <LoginForm errorMessage={errorMessage} old={old} errors={errors}></LoginForm>
           </section>
         </section>
 

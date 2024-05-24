@@ -2,7 +2,7 @@ import { html } from "@elysiajs/html";
 import jwt from "@elysiajs/jwt";
 import Elysia, { StatusMap, t } from "elysia";
 
-import { LoginPage, RegisterPage } from "./pages";
+import { LoginForm, LoginPage, RegisterPage } from "./pages";
 import { ValidateLogin, ValidateRegister } from "@/schema/auth.schema";
 import { Login, Register } from "@/utils/auth";
 
@@ -28,13 +28,13 @@ const routes = new Elysia()
     const validated = ValidateLogin(body)
 
     if (!validated.success) {
-      return LoginPage({ old: body, errors: validated.error.flatten() })
+      return LoginForm({ old: body, errors: validated.error.flatten() })
     }
 
     const user = await Login(validated.data)
 
     if (!user) {
-      return LoginPage({ old: body, errorMessage: "Your login credentials don't match our records" })
+      return LoginForm({ old: body, errorMessage: "Your login credentials don't match our records" })
     }
 
     auth.set({
@@ -43,7 +43,9 @@ const routes = new Elysia()
       maxAge: 7 * 86400, // one week
     })
 
-    set.redirect = '/'
+    set.status = StatusMap['No Content']
+    set.headers['hx-redirect'] = '/'
+    return
   }, {
     body: t.Object({
       email: t.String(),

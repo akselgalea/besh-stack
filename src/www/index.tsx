@@ -1,13 +1,9 @@
 import Elysia, { StatusMap, t } from "elysia"
-import HomePage from "./pages/home/Home"
 import { html } from "@elysiajs/html"
 import Layout from "./components/Layout/Layout"
-import NotFound from "./pages/not-found/NotFound"
+import { NotFoundPage, HomePage } from "./pages"
 import Test from "./pages/test/Test"
-import LoginPage from "./pages/auth/LogIn"
-import { ValidateLogin } from "@/schema/auth.schema"
-import { LoginRequest, User } from "@/types"
-import { Login } from "@/utils/auth"
+import { User } from "@/types"
 import jwt from "@elysiajs/jwt"
 import { routes as authRoutes } from "./auth"
 
@@ -42,7 +38,7 @@ const www = new Elysia()
     
     return (
       <Layout title="Page not found" currentUrl={path} user={ user as User }>
-        <NotFound></NotFound>
+        <NotFoundPage></NotFoundPage>
       </Layout>
     )
   })
